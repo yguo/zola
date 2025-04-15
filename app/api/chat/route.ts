@@ -1,6 +1,6 @@
 // /chat/api/chat.ts
 import { checkUsage, incrementUsage } from "@/lib/api"
-import { MODELS } from "@/lib/config"
+import { MODELS, SYSTEM_PROMPT_DEFAULT } from "@/lib/config"
 import { sanitizeUserInput } from "@/lib/sanitize"
 import { validateUserIdentity } from "@/lib/server/api"
 import { Attachment } from "@ai-sdk/ui-utils"
@@ -18,12 +18,20 @@ type ChatRequest = {
   model: string
   isAuthenticated: boolean
   systemPrompt: string
+  agentId?: string
 }
 
 export async function POST(req: Request) {
   try {
-    const { messages, chatId, userId, model, isAuthenticated, systemPrompt } =
-      (await req.json()) as ChatRequest
+    const {
+      messages,
+      chatId,
+      userId,
+      model,
+      isAuthenticated,
+      systemPrompt,
+      agentId,
+    } = (await req.json()) as ChatRequest
 
     if (!messages || !chatId || !userId) {
       return new Response(
@@ -57,6 +65,22 @@ export async function POST(req: Request) {
       }
     }
 
+    let effectiveSystemPrompt = systemPrompt || SYSTEM_PROMPT_DEFAULT
+
+    if (agentId) {
+      const { data: agent, error } = await supabase
+        .from("agents")
+        .select("system_prompt")
+        .eq("id", agentId)
+        .single()
+
+      if (error || !agent) {
+        console.warn("Failed to fetch agent prompt, using fallback.")
+      } else {
+        effectiveSystemPrompt = agent.system_prompt || effectiveSystemPrompt
+      }
+    }
+
     const modelConfig = MODELS.find((m) => m.id === model)
     if (!modelConfig){
       throw new Error(`Model ${model} not found`)
@@ -73,7 +97,7 @@ export async function POST(req: Request) {
 
     const result = streamText({
       model: modelInstance,
-      system: systemPrompt || "You are a helpful assistant.",
+      system: effectiveSystemPrompt,
       messages,
       // When the response finishes, insert the assistant messages to supabase
       async onFinish({ response }) {
@@ -132,7 +156,7 @@ export async function POST(req: Request) {
       headers,
     })
   } catch (err: any) {
-    console.error("Error in /chat/api/chat:", err)
+    console.error("Error in /api/chat:", err)
     // Return a structured error response if the error is a UsageLimitError.
     if (err.code === "DAILY_LIMIT_REACHED") {
       return new Response(
