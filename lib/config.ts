@@ -195,6 +195,7 @@ export const MODELS = [
     ],
     api_sdk: mistral("mistral-large-latest"),
     icon: Mistral,
+    description: "Fine-tuned for chat. A lighter, faster option for everyday use.",
   },
   {
     id: "deepseek-r1",
@@ -208,7 +209,7 @@ export const MODELS = [
     ],
     api_sdk: "deepseek/deepseek-r1:free", // this is a special case for openrouter
     description:
-      "Fine-tuned for chat. A lighter, faster option for everyday use.",
+      "A reasoning-first model trained with reinforcement learning, built for math, code, and complex problem solving",
   },
 ] as Model[]
 

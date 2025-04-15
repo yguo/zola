@@ -111,11 +111,11 @@ export function Chat() {
         errorMsg = parsed.error || errorMsg
       } catch {
         errorMsg = error.message || errorMsg
-        }
-          toast({
-            title: errorMsg,
-            status: "error",
-          })
+      }
+      toast({
+        title: errorMsg,
+        status: "error",
+      })
     }
   }, [error])
 
@@ -164,7 +164,7 @@ export function Chat() {
       const rateData = await checkRateLimits(uid, isAuthenticated)
 
       if (rateData.remaining === 0 && !isAuthenticated) {
-          setHasDialogAuth(true)
+        setHasDialogAuth(true)
         return false
       }
 
@@ -304,23 +304,23 @@ export function Chat() {
     if (!uid) return
 
     const optimisticId = `optimistic-${Date.now().toString()}`
-      const optimisticAttachments =
-        files.length > 0 ? createOptimisticAttachments(files) : []
+    const optimisticAttachments =
+      files.length > 0 ? createOptimisticAttachments(files) : []
 
-      const optimisticMessage = {
-        id: optimisticId,
-        content: input,
-        role: "user" as const,
-        createdAt: new Date(),
-        experimental_attachments:
-          optimisticAttachments.length > 0 ? optimisticAttachments : undefined,
-      }
+    const optimisticMessage = {
+      id: optimisticId,
+      content: input,
+      role: "user" as const,
+      createdAt: new Date(),
+      experimental_attachments:
+        optimisticAttachments.length > 0 ? optimisticAttachments : undefined,
+    }
 
-      setMessages((prev) => [...prev, optimisticMessage])
-      setInput("")
+    setMessages((prev) => [...prev, optimisticMessage])
+    setInput("")
 
-      const submittedFiles = [...files]
-      setFiles([])
+    const submittedFiles = [...files]
+    setFiles([])
 
     const allowed = await checkLimitsAndNotify(uid)
     if (!allowed) {
@@ -332,33 +332,33 @@ export function Chat() {
 
     const currentChatId = await ensureChatExists(uid)
     if (!currentChatId) {
-        setMessages((prev) => prev.filter((msg) => msg.id !== optimisticId))
+      setMessages((prev) => prev.filter((msg) => msg.id !== optimisticId))
+      cleanupOptimisticAttachments(optimisticMessage.experimental_attachments)
+      setIsSubmitting(false)
+      return
+    }
+
+    if (input.length > MESSAGE_MAX_LENGTH) {
+      toast({
+        title: `The message you submitted was too long, please submit something shorter. (Max ${MESSAGE_MAX_LENGTH} characters)`,
+        status: "error",
+      })
+      setMessages((prev) => prev.filter((msg) => msg.id !== optimisticId))
+      cleanupOptimisticAttachments(optimisticMessage.experimental_attachments)
+      setIsSubmitting(false)
+      return
+    }
+
+    let attachments: Attachment[] | null = []
+    if (submittedFiles.length > 0) {
+      attachments = await handleFileUploads(uid, currentChatId)
+      if (attachments === null) {
+        setMessages((prev) => prev.filter((m) => m.id !== optimisticId))
         cleanupOptimisticAttachments(optimisticMessage.experimental_attachments)
         setIsSubmitting(false)
         return
       }
-
-      if (input.length > MESSAGE_MAX_LENGTH) {
-        toast({
-          title: `The message you submitted was too long, please submit something shorter. (Max ${MESSAGE_MAX_LENGTH} characters)`,
-          status: "error",
-        })
-      setMessages((prev) => prev.filter((msg) => msg.id !== optimisticId))
-      cleanupOptimisticAttachments(optimisticMessage.experimental_attachments)
-        setIsSubmitting(false)
-        return
-      }
-
-      let attachments: Attachment[] | null = []
-      if (submittedFiles.length > 0) {
-        attachments = await handleFileUploads(uid, currentChatId)
-        if (attachments === null) {
-          setMessages((prev) => prev.filter((m) => m.id !== optimisticId))
-          cleanupOptimisticAttachments(optimisticMessage.experimental_attachments)
-          setIsSubmitting(false)
-          return
-        }
-      }
+    }
 
     const options = {
       body: {
