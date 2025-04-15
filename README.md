@@ -1,4 +1,4 @@
-# Zola
+# Zola Chat
 
 [zola.chat](https://zola.chat)
 

@@ -118,8 +118,8 @@ CREATE TABLE users (
   preferred_model TEXT,
   premium BOOLEAN DEFAULT false,
   profile_image TEXT,
-  created_at TIMESTAMPTZ DEFAULT NOW()
-  last_active_at: TIMESTAMPTZ DEFAULT NOW()
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  last_active_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- Chats table

@@ -4,6 +4,7 @@ import Gemini from "@/components/icons/gemini"
 import Grok from "@/components/icons/grok"
 import Mistral from "@/components/icons/mistral"
 import OpenAI from "@/components/icons/openai"
+import OpenRouter from "@/components/icons/openrouter"
 import { mistral } from "@ai-sdk/mistral"
 import { openai } from "@ai-sdk/openai"
 import {
@@ -22,8 +23,8 @@ import {
   Sparkle,
 } from "@phosphor-icons/react/dist/ssr"
 
-export const NON_AUTH_DAILY_MESSAGE_LIMIT = 5
-export const AUTH_DAILY_MESSAGE_LIMIT = 100
+export const NON_AUTH_DAILY_MESSAGE_LIMIT = 500
+export const AUTH_DAILY_MESSAGE_LIMIT = 1000
 export const REMAINING_QUERY_ALERT_THRESHOLD = 2
 export const DAILY_FILE_UPLOAD_LIMIT = 10
 
@@ -40,19 +41,7 @@ export type Model = {
 }
 
 export const MODELS_NOT_AVAILABLE = [
-  {
-    id: "deepseek-r1",
-    name: "DeepSeek R1",
-    provider: "deepseek",
-    available: false,
-    api_sdk: false,
-    features: [
-      {
-        id: "file-upload",
-        enabled: false,
-      },
-    ],
-  },
+  
   {
     id: "gemini-1.5-pro",
     name: "Gemini 1.5 Pro",
@@ -182,6 +171,19 @@ export const MODELS = [
       },
     ],
     api_sdk: mistral("mistral-large-latest"),
+    icon: Mistral,
+  },
+  {
+    id: "deepseek-r1",
+    name: "DeepSeek R1",
+    provider: "openrouter",
+    features: [
+      {
+        id: "file-upload",
+        enabled: true,
+      },
+    ],
+    api_sdk: "deepseek/deepseek-r1:free", // this is a special case for openrouter
   },
 ] as Model[]
 
@@ -229,6 +231,11 @@ const PROVIDERS_NOT_AVAILABLE = [
 
 export const PROVIDERS = [
   {
+    id: "openrouter",
+    name: "OpenRouter",
+    icon: OpenRouter,
+  },
+  {
     id: "openai",
     name: "OpenAI",
     icon: OpenAI,
@@ -248,12 +255,13 @@ export const PROVIDERS_OPTIONS = [
   ...PROVIDERS_NOT_AVAILABLE,
 ] as Provider[]
 
-export const MODEL_DEFAULT = "pixtral-large-latest"
+// export const MODEL_DEFAULT = "pixtral-large-latest"
+export const MODEL_DEFAULT = "deepseek-r1"
 
-export const APP_NAME = "Zola"
+export const APP_NAME = "Zola Chat"
 export const APP_DOMAIN = "https://zola.chat"
 export const APP_DESCRIPTION =
-  "Zola is a free, open-source AI chat app with multi-model support."
+  "Zola Chat is a free, open-source AI chat app with multi-model support."
 
 export const PERSONAS = [
   {
@@ -385,7 +393,7 @@ export const SUGGESTIONS = [
     highlight: "Explain",
     prompt: `Explain`,
     items: [
-      "Explain quantum physics like I’m 10",
+      "Explain quantum physics like I'm 10",
       "Explain stoicism in simple terms",
       "Explain how a neural network works",
       "Explain the difference between AI and AGI",
