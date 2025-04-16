@@ -23,8 +23,8 @@ import {
   Sparkle,
 } from "@phosphor-icons/react/dist/ssr"
 
-export const NON_AUTH_DAILY_MESSAGE_LIMIT = 500
-export const AUTH_DAILY_MESSAGE_LIMIT = 1000
+export const NON_AUTH_DAILY_MESSAGE_LIMIT = 5
+export const AUTH_DAILY_MESSAGE_LIMIT = 100
 export const REMAINING_QUERY_ALERT_THRESHOLD = 2
 export const DAILY_FILE_UPLOAD_LIMIT = 10
 
@@ -195,6 +195,7 @@ export const MODELS = [
     ],
     api_sdk: mistral("mistral-large-latest"),
     icon: Mistral,
+    description: "Fine-tuned for chat. A lighter, faster option for everyday use.",
   },
   {
     id: "deepseek-r1",
@@ -208,7 +209,7 @@ export const MODELS = [
     ],
     api_sdk: "deepseek/deepseek-r1:free", // this is a special case for openrouter
     description:
-      "Fine-tuned for chat. A lighter, faster option for everyday use.",
+      "A reasoning-first model trained with reinforcement learning, built for math, code, and complex problem solving",
   },
 ] as Model[]
 
@@ -280,13 +281,12 @@ export const PROVIDERS_OPTIONS = [
   ...PROVIDERS_NOT_AVAILABLE,
 ] as Provider[]
 
-// export const MODEL_DEFAULT = "pixtral-large-latest"
-export const MODEL_DEFAULT = "deepseek-r1"
+export const MODEL_DEFAULT = "pixtral-large-latest"
 
-export const APP_NAME = "Zola Chat"
+export const APP_NAME = "Zola"
 export const APP_DOMAIN = "https://zola.chat"
 export const APP_DESCRIPTION =
-  "Zola Chat is a free, open-source AI chat app with multi-model support."
+  "Zola is a free, open-source AI chat app with multi-model support."
 
 export const PERSONAS = [
   {

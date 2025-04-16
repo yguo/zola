@@ -51,8 +51,3 @@ next-env.d.ts
 bun.lockb
 bun.lock
 
-# vscode
-.vscode/
-
-# .idea
-.idea/
