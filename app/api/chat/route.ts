@@ -99,6 +99,9 @@ export async function POST(req: Request) {
       model: modelInstance,
       system: effectiveSystemPrompt,
       messages,
+      onError: (err) => {
+        console.error("🛑 streamText error:", err)
+      },
       // When the response finishes, insert the assistant messages to supabase
       async onFinish({ response }) {
         try {
