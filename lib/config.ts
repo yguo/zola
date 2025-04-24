@@ -5,6 +5,7 @@ import Grok from "@/components/icons/grok"
 import Mistral from "@/components/icons/mistral"
 import OpenAI from "@/components/icons/openai"
 import OpenRouter from "@/components/icons/openrouter"
+import OpenRouter from "@/components/icons/openrouter"
 import { mistral } from "@ai-sdk/mistral"
 import { openai } from "@ai-sdk/openai"
 import {
@@ -27,6 +28,7 @@ export const NON_AUTH_DAILY_MESSAGE_LIMIT = 5
 export const AUTH_DAILY_MESSAGE_LIMIT = 100
 export const REMAINING_QUERY_ALERT_THRESHOLD = 2
 export const DAILY_FILE_UPLOAD_LIMIT = 10
+export const DAILY_SPECIAL_AGENT_LIMIT = 2
 
 export type Model = {
   id: string
@@ -39,6 +41,7 @@ export type Model = {
     enabled: boolean
   }[]
   description?: string
+  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>
 }
 
 export const MODELS_NOT_AVAILABLE = [
@@ -55,6 +58,7 @@ export const MODELS_NOT_AVAILABLE = [
         enabled: true,
       },
     ],
+    icon: Gemini,
   },
   {
     id: "claude-3-5-sonnet",
@@ -68,6 +72,7 @@ export const MODELS_NOT_AVAILABLE = [
         enabled: true,
       },
     ],
+    icon: Claude,
   },
   {
     id: "claude-3.7-sonnet",
@@ -81,6 +86,7 @@ export const MODELS_NOT_AVAILABLE = [
         enabled: true,
       },
     ],
+    icon: Claude,
   },
   {
     id: "grok-2",
@@ -94,6 +100,7 @@ export const MODELS_NOT_AVAILABLE = [
         enabled: true,
       },
     ],
+    icon: Grok,
   },
   {
     id: "gemini-2.0-flash",
@@ -107,6 +114,7 @@ export const MODELS_NOT_AVAILABLE = [
         enabled: true,
       },
     ],
+    icon: Gemini,
   },
   {
     id: "gemini-2.5-pro",
@@ -120,6 +128,7 @@ export const MODELS_NOT_AVAILABLE = [
         enabled: true,
       },
     ],
+    icon: Gemini,
   },
 ] as Model[]
 
@@ -135,9 +144,9 @@ export const MODELS = [
       },
     ],
     api_sdk: openai("gpt-4.1"),
-    icon: OpenAI,
     description:
       "OpenAI’s most powerful model. Excellent at coding, writing, and complex tasks.",
+    icon: OpenAI,
   },
   {
     id: "gpt-4.1-mini",
@@ -150,9 +159,9 @@ export const MODELS = [
       },
     ],
     api_sdk: openai("gpt-4.1-mini"),
-    icon: OpenAI,
     description:
       "Fast and smart — a great balance for most tasks. Outperforms GPT‑4o mini.",
+    icon: OpenAI,
   },
   {
     id: "gpt-4.1-nano",
@@ -165,9 +174,9 @@ export const MODELS = [
       },
     ],
     api_sdk: openai("gpt-4.1-nano"),
-    icon: OpenAI,
     description:
       "Ultra fast and cheap. Ideal for simple tasks, summaries, or classification.",
+    icon: OpenAI,
   },
   {
     id: "pixtral-large-latest",
@@ -182,6 +191,7 @@ export const MODELS = [
     api_sdk: mistral("pixtral-large-latest"),
     description:
       "Mistral’s flagship model. Great for reasoning, writing, and advanced tasks.",
+    icon: Mistral,
   },
   {
     id: "mistral-large-latest",
@@ -262,6 +272,11 @@ export const PROVIDERS = [
     icon: OpenRouter,
   },
   {
+    id: "openrouter",
+    name: "OpenRouter",
+    icon: OpenRouter,
+  },
+  {
     id: "openai",
     name: "OpenAI",
     icon: OpenAI,
@@ -270,6 +285,11 @@ export const PROVIDERS = [
     id: "mistral",
     name: "Mistral",
     icon: Mistral,
+  },
+  {
+    id: "deepseek",
+    name: "DeepSeek",
+    icon: DeepSeek,
   },
 ] as Provider[]
 
@@ -419,6 +439,7 @@ export const SUGGESTIONS = [
     prompt: `Explain`,
     items: [
       "Explain quantum physics like I'm 10",
+      "Explain quantum physics like I'm 10",
       "Explain stoicism in simple terms",
       "Explain how a neural network works",
       "Explain the difference between AI and AGI",
@@ -431,7 +452,7 @@ export const SYSTEM_PROMPT_DEFAULT = `You are Zola, a thoughtful and clear assis
 
 export const MESSAGE_MAX_LENGTH = 4000
 
-export const ZOLA_AGENT_SLUGS = [
+export const ZOLA_AGENTS_SLUGS = [
   "tweet-vibe-checker",
   "clear-ux-copywriter",
   "0-to-1-advisor",
@@ -442,6 +463,17 @@ export const ZOLA_AGENT_SLUGS = [
   "tiny-essay",
   "solene",
   "eloi",
+]
+
+export const ZOLA_SPECIAL_AGENTS_SLUGS = [
+  "zola-research",
+  "competitor-teardown",
+  "positioning-snapshot",
+]
+export const ZOLA_AGENTS_TOOLING_IDS = [
+  "321c68a2-6c1a-4bd4-948c-9d20e4aeb10c", // research
+  "ecd82d26-7c82-4661-83f6-8f362b2687da", // competitor teardown
+  "b2a4ddaa-8e99-49dd-8156-71d95ccfd717", // positioning snapshot
 ]
 
 export const ZOLA_COMING_SOON_AGENTS = [

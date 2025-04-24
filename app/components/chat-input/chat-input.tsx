@@ -7,7 +7,6 @@ import {
   PromptInputTextarea,
 } from "@/components/prompt-kit/prompt-input"
 import { Button } from "@/components/ui/button"
-import { APP_NAME } from "@/lib/config"
 import { ArrowUp, Stop } from "@phosphor-icons/react"
 import React, { useCallback } from "react"
 import { ButtonFileUpload } from "./button-file-upload"
@@ -33,8 +32,7 @@ type ChatInputProps = {
   systemPrompt?: string
   stop: () => void
   status?: "submitted" | "streaming" | "ready" | "error"
-  setSelectedAgentId: (agentId: string | null) => void
-  selectedAgentId: string | null
+  placeholder?: string
 }
 
 export function ChatInput({
@@ -53,8 +51,7 @@ export function ChatInput({
   onSelectSystemPrompt,
   stop,
   status,
-  setSelectedAgentId,
-  selectedAgentId,
+  placeholder,
 }: ChatInputProps) {
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
@@ -96,8 +93,6 @@ export function ChatInput({
           onValueChange={onValueChange}
           onSuggestion={onSuggestion}
           value={value}
-          setSelectedAgentId={setSelectedAgentId}
-          selectedAgentId={selectedAgentId}
         />
       )}
       <div className="relative order-2 px-2 pb-3 sm:pb-4 md:order-1">
@@ -109,7 +104,7 @@ export function ChatInput({
         >
           <FileList files={files} onFileRemove={onFileRemove} />
           <PromptInputTextarea
-            placeholder={`Ask ${APP_NAME}`}
+            placeholder={placeholder}
             onKeyDown={handleKeyDown}
             className="mt-2 ml-2 min-h-[44px] text-base leading-[1.3] sm:text-base md:text-base"
           />

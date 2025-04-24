@@ -133,6 +133,7 @@ export type Database = {
           title: string | null
           user_id: string
           system_prompt: string | null
+          public: boolean
         }
         Insert: {
           agent_id?: string | null
@@ -142,6 +143,7 @@ export type Database = {
           title?: string | null
           user_id: string
           system_prompt?: string | null
+          public?: boolean
         }
         Update: {
           agent_id?: string | null
@@ -151,6 +153,7 @@ export type Database = {
           title?: string | null
           user_id?: string
           system_prompt?: string | null
+          public?: boolean
         }
         Relationships: [
           {
@@ -177,6 +180,7 @@ export type Database = {
           created_at: string | null
           id: number
           role: "system" | "user" | "assistant" | "data"
+          parts: Json | null
         }
         Insert: {
           experimental_attachments?: Attachment[]
@@ -185,6 +189,7 @@ export type Database = {
           created_at?: string | null
           id?: number
           role: "system" | "user" | "assistant" | "data"
+          parts?: Json
         }
         Update: {
           experimental_attachments?: Attachment[]
@@ -193,6 +198,7 @@ export type Database = {
           created_at?: string | null
           id?: number
           role?: "system" | "user" | "assistant" | "data"
+          parts?: Json
         }
         Relationships: []
       }

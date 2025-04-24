@@ -1,10 +1,11 @@
 "use client"
 
 import type { AgentsSuggestions } from "@/app/types/agent"
-import { ZOLA_AGENT_SLUGS } from "@/lib/config"
+import { ZOLA_AGENTS_SLUGS } from "@/lib/config"
 import { createClient } from "@/lib/supabase/client"
 import { cn } from "@/lib/utils"
 import { AnimatePresence, motion } from "motion/react"
+import { useRouter } from "next/navigation"
 import React, { memo, useEffect, useMemo, useState } from "react"
 import { Agents } from "./agents"
 import { Suggestions } from "./suggestions"
@@ -14,8 +15,6 @@ type PromptSystemProps = {
   onSuggestion: (suggestion: string) => void
   onSelectSystemPrompt: (systemPrompt: string) => void
   value: string
-  setSelectedAgentId: (agentId: string | null) => void
-  selectedAgentId: string | null
 }
 
 export const PromptSystem = memo(function PromptSystem({
@@ -23,9 +22,8 @@ export const PromptSystem = memo(function PromptSystem({
   onSuggestion,
   onSelectSystemPrompt,
   value,
-  setSelectedAgentId,
-  selectedAgentId,
 }: PromptSystemProps) {
+  const router = useRouter()
   const [isAgentMode, setIsAgentMode] = useState(false)
   const [sugestedAgents, setSugestedAgents] = useState<
     AgentsSuggestions[] | null
@@ -36,8 +34,8 @@ export const PromptSystem = memo(function PromptSystem({
       const supabase = createClient()
       const { data, error } = await supabase
         .from("agents")
-        .select("id, name, description, avatar_url")
-        .in("slug", ZOLA_AGENT_SLUGS)
+        .select("id, name, description, avatar_url, slug")
+        .in("slug", ZOLA_AGENTS_SLUGS)
 
       if (error) {
         throw new Error("Error fetching agents: " + error.message)
@@ -61,7 +59,7 @@ export const PromptSystem = memo(function PromptSystem({
         onClick: () => {
           setIsAgentMode(true)
           onSelectSystemPrompt("")
-          setSelectedAgentId(null)
+          router.push("/")
         },
       },
       {
@@ -71,7 +69,7 @@ export const PromptSystem = memo(function PromptSystem({
         onClick: () => {
           setIsAgentMode(false)
           onSelectSystemPrompt("")
-          setSelectedAgentId(null)
+          router.push("/")
         },
       },
     ],
@@ -83,11 +81,7 @@ export const PromptSystem = memo(function PromptSystem({
       <div className="relative order-1 w-full md:absolute md:bottom-[-70px] md:order-2 md:h-[70px]">
         <AnimatePresence mode="popLayout">
           {isAgentMode ? (
-            <Agents
-              setSelectedAgentId={setSelectedAgentId}
-              selectedAgentId={selectedAgentId}
-              sugestedAgents={sugestedAgents || []}
-            />
+            <Agents sugestedAgents={sugestedAgents || []} />
           ) : (
             <Suggestions
               onValueChange={onValueChange}

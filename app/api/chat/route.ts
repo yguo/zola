@@ -4,6 +4,7 @@ import { MODELS, SYSTEM_PROMPT_DEFAULT } from "@/lib/config"
 import { sanitizeUserInput } from "@/lib/sanitize"
 import { validateUserIdentity } from "@/lib/server/api"
 import { Attachment } from "@ai-sdk/ui-utils"
+import { createOpenRouter } from "@openrouter/ai-sdk-provider"
 import { Message as MessageAISDK, streamText } from "ai"
 import { createOpenRouter } from "@openrouter/ai-sdk-provider"
 
@@ -42,7 +43,6 @@ export async function POST(req: Request) {
 
     const supabase = await validateUserIdentity(userId, isAuthenticated)
 
-    // First check if the user is within their usage limits
     await checkUsage(supabase, userId)
 
     const userMessage = messages[messages.length - 1]
@@ -59,8 +59,6 @@ export async function POST(req: Request) {
         console.error("Error saving user message:", msgError)
       } else {
         console.log("User message saved successfully.")
-
-        // Increment usage only after confirming the message was saved
         await incrementUsage(supabase, userId)
       }
     }
