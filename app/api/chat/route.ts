@@ -4,7 +4,6 @@ import { MODELS, SYSTEM_PROMPT_DEFAULT } from "@/lib/config"
 import { sanitizeUserInput } from "@/lib/sanitize"
 import { validateUserIdentity } from "@/lib/server/api"
 import { Attachment } from "@ai-sdk/ui-utils"
-import { createOpenRouter } from "@openrouter/ai-sdk-provider"
 import { Message as MessageAISDK, streamText } from "ai"
 import { createOpenRouter } from "@openrouter/ai-sdk-provider"
 
