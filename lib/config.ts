@@ -5,7 +5,6 @@ import Grok from "@/components/icons/grok"
 import Mistral from "@/components/icons/mistral"
 import OpenAI from "@/components/icons/openai"
 import OpenRouter from "@/components/icons/openrouter"
-import OpenRouter from "@/components/icons/openrouter"
 import { mistral } from "@ai-sdk/mistral"
 import { openai } from "@ai-sdk/openai"
 import {
